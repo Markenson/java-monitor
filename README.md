@@ -47,6 +47,11 @@ java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter
 
 ```
 
+Get results on 
+```
+{user.home}\java.log
+```
+
 Usage example
 
 ```
