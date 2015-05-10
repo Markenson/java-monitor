@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  * \java-monitor-1.0-SNAPSHOT.jar=-class=br.com.markenson.monitor.java.App
  * -Djava.util.logging.config.file=D:\Publica\logging.properties
  * 
- * @author samsung
+ * @author markenson
  * 
  */
 public class Agent {
