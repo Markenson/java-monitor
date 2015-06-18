@@ -62,7 +62,33 @@
 				<configuration>
 					<argline>-javaagent:target/${project.build.finalName}.jar=-class=.* -Djava.util.logging.config.file=D:\Publica\logging.properties</argline>
 				</configuration>
-			</plugin>			
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>br.com.markenson.monitor.java.Agent</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <!-- bind to the packaging phase -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+            </plugin>
+
 		</plugins>
 	</build>
 </project>
