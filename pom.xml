@@ -44,11 +44,14 @@
 							<goal>jar</goal>
 						</goals>
 						<configuration>
-							<archive>
-								<manifestEntries>
-									<premain-class>br.com.markenson.monitor.java.Agent</premain-class>
-								</manifestEntries>
-							</archive>
+                            <archive>
+                                <manifest>
+                                    <mainClass>br.com.markenson.monitor.java.App</mainClass>
+                                </manifest>
+                                <manifestEntries>
+                                    <premain-class>br.com.markenson.monitor.java.Agent</premain-class>
+                                </manifestEntries>
+                            </archive>
 						</configuration>
 					</execution>
 				</executions>
@@ -68,9 +71,12 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
 					<archive>
-						<manifest>
-							<mainClass>br.com.markenson.monitor.java.Agent</mainClass>
-						</manifest>
+                        <manifest>
+                            <mainClass>br.com.markenson.monitor.java.App</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <premain-class>br.com.markenson.monitor.java.Agent</premain-class>
+                        </manifestEntries>
 					</archive>
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
