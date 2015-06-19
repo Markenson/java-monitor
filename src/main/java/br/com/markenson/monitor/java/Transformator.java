@@ -7,9 +7,7 @@ import java.security.ProtectionDomain;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtMethod;
+import javassist.*;
 
 public class Transformator implements ClassFileTransformer {
 
@@ -28,8 +26,16 @@ public class Transformator implements ClassFileTransformer {
 		if (!className.replace("/", ".").matches("(java\\..*|sun\\..*)") && className.replace("/", ".").matches(clazz)) {
 			System.out.println("Instrumenting " + className);
 			try {
+
 				ClassPool cp = ClassPool.getDefault();
-				CtClass cc = cp.get(className.replace("/", "."));
+				CtClass cc = null;
+				try {
+					cc = cp.get(className.replace("/", "."));
+				}catch (javassist.NotFoundException nfe){
+					cp.appendClassPath(new LoaderClassPath(Thread.currentThread().getContextClassLoader()));
+					cc = cp.get(className.replace("/", "."));
+				}
+
 				if (!cc.isInterface()){
 					for (CtMethod m : cc.getDeclaredMethods()) {
 						if((m.getModifiers() & Modifier.ABSTRACT) != Modifier.ABSTRACT){
