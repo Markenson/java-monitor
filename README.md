@@ -34,7 +34,9 @@ loggin.properties sample
 ```
 handlers= java.util.logging.FileHandler,java.util.logging.ConsoleHandler
 
-.level= INFO
+.level=INFO
+br.com.markenson.monitor.java.handlers = java.util.logging.FileHandler
+br.com.markenson.monitor.java.level = INFO
 
 java.util.logging.FileHandler.pattern = %h/java%u.log
 java.util.logging.FileHandler.limit = 5000000
