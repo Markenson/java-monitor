@@ -23,7 +23,7 @@ public class Transformator implements ClassFileTransformer {
 
 		byte[] byteCode = classfileBuffer;
 
-		if (!className.replace("/", ".").matches("(java\\..*|sun\\..*)") && className.replace("/", ".").matches(clazz)) {
+		if (className.replace("/", ".").matches(clazz)) {
 			System.out.println("Instrumenting " + className);
 			try {
 
@@ -43,10 +43,10 @@ public class Transformator implements ClassFileTransformer {
 							m.addLocalVariable("elapsedTime", CtClass.longType);
 							m.addLocalVariable("timestamp", CtClass.longType);
 							m.addLocalVariable("msg", ClassPool.getDefault().get("java.lang.String"));
-							m.insertBefore("elapsedTime = System.nanoTime();timestamp = System.currentTimeMillis();");
-							m.insertAfter("{elapsedTime = System.nanoTime() - elapsedTime;"
-									+ "msg= timestamp + \"," + cc.getName() + "." + m.getName() + m.getSignature() + ", \" + elapsedTime + \" ns\";"
-									+ "br.com.markenson.monitor.java.Agent.log(msg);}");
+							m.insertBefore("elapsedTime = System.currentTimeMillis();timestamp = System.currentTimeMillis();");
+							m.insertAfter("{elapsedTime = System.currentTimeMillis() - elapsedTime;"
+									+ "msg= timestamp + \"," + cc.getName() + "." + m.getName() + m.getSignature() + ", \" + elapsedTime + \" ms\";"
+									+ "java.util.logging.Logger.getLogger(\"br.com.markenson.monitor.java\").info(msg);}");
 						}
 					}
 					byteCode = cc.toBytecode();
@@ -56,6 +56,8 @@ public class Transformator implements ClassFileTransformer {
 				ex.printStackTrace();
 			}
 
+		}else{
+			System.out.println("Avoiding " + className);
 		}
 		
 		return byteCode;

@@ -1,9 +1,6 @@
 package br.com.markenson.monitor.java;
 
 import java.lang.instrument.Instrumentation;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
@@ -17,14 +14,17 @@ import java.util.logging.Logger;
  */
 public class Agent {
 
-	private static final ScheduledExecutorService executor;
 	private static final Logger log;
-	private static StringBuffer toLog = new StringBuffer();
-	
+
 	static{
 		log = java.util.logging.Logger.getLogger("br.com.markenson.monitor.java");
-		executor = Executors.newSingleThreadScheduledExecutor();
-		executor.scheduleAtFixedRate(new SendToLogTask(log, toLog), 0, 1, TimeUnit.SECONDS);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(){
+            @Override
+            public void run() {
+                Agent.onExit();
+            }
+        });
 	}
 
 	private static String clazz;
@@ -36,32 +36,20 @@ public class Agent {
 
 	private static void processParams(String agentArgs) {
 		if (agentArgs.startsWith("-class=")){
-			clazz = agentArgs.split("=")[1];
-		}
+            clazz = agentArgs.split("=")[1];
+
+            if (clazz.replace("/", ".").matches("(java\\..*|sun\\..*)")){
+                System.out.println("********************    WARNING!  **********************");
+                System.out.println("The -class= param includes java.* and sun.* classes!");
+                System.out.println("                Your system MAY CRASH!");
+                System.out.println("********************    WARNING!  **********************");
+            }
+
+        }
 	}
 
-	public static void log(String msg) {
-		toLog.append(msg);
-		toLog.append("\n");
-	}
-	
-}
+    private static void onExit() {
+        System.out.println("Java Monitor exited!");
+    }
 
-class SendToLogTask implements Runnable{
-
-	private Logger log;
-	private StringBuffer toLog;
-	
-	public SendToLogTask(Logger log, StringBuffer toLog) {
-		this.log = log;
-		this.toLog = toLog;
-	}
-	
-	public void run() {
-		if (toLog.length()>0){
-			log.info(toLog.toString());
-			toLog=new StringBuffer();
-		}
-	}
-	
 }
