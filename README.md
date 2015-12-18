@@ -59,3 +59,10 @@ Usage example
 ```
 java -jar some-app.jar -javaagent:C:\repo\java-monitor\target\java-monitor-1.0-SNAPSHOT.jar=-class=.* -Djava.util.logging.config.file=c:\logs\logging.properties
 ```
+
+Releases
+=============
+
+0.0.1 - Initial version
+
+0.0.2 - Java 7/8 support
