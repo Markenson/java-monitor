@@ -57,7 +57,7 @@ public class Transformator implements ClassFileTransformer {
 			}
 
 		}else{
-			System.out.println("Avoiding " + className);
+			//System.out.println("Avoiding " + className);
 		}
 		
 		return byteCode;
